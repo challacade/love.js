@@ -32,7 +32,7 @@ if love.event then
   local _love_event_push = love.event.push
   function love.event.push(event, action, ...)
     if event == 'quit' and action == 'reload' then
-      love.js.eval('window.reload()')
+      love.js.eval('window.location.reload()')
       return
     end
     return _love_event_push(event, action, ...)
@@ -43,18 +43,20 @@ if love.audio then
   local playing = {}
   local function _cleanup_playing()
     for s in pairs(playing) do
-      if not s:isPlaying() then
+      -- we need to use "pcall" in case the object was released
+      local ok, playing = pcall(s.isPlaying, s)
+      if not ok or not playing then
         playing[s] = nil
       end
     end
   end
   local _love_audio_play = love.audio.play
   function love.audio.play(...)
-    _cleanup_playing()
+    --_cleanup_playing()
     -- track currently playing
     for i = 1, select("#", ...) do
-      local s = select(i, ...)
-      playing[s] = true
+      local source = select(i, ...)
+      playing[source] = true
     end
     return _love_audio_play(...)
   end
@@ -64,6 +66,7 @@ if love.audio then
     if source then
       return _love_audio_stop(source, ...)
     end
+    _cleanup_playing()
     for s in pairs(playing) do
       s:stop()
       playing[s] = nil
@@ -74,9 +77,11 @@ if love.audio then
   if reg then
     local _Source_play = reg.Source.play
     reg.Source.play = function(source, ...)
-      _cleanup_playing()
-      playing[source] = true
-      return _Source_play(source, ...)
+      local res = _Source_play(source, ...)
+      if res then
+        playing[source] = true
+      end
+      return res
     end
   end
 end

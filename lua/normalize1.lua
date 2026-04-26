@@ -27,37 +27,36 @@ SOFTWARE.
 
 -- normalize.lua is a series of hacks which ensure that
 -- love.js behaves more closely to the downloadable version
-
-if os then
-  local cache = {}
-  os.execute = function(cmd)
-    if not love then
-      return
+love.js = {}
+local cache = {}
+function love.js.eval(cmd)
+  -- todo: system module is required
+  love.system = love.system or require('love.system')
+  -- evaluate the command
+  love.system.openURL('javascript:'..cmd)
+  
+  -- read back the output stream
+  for i = 1, 2^32 do
+    local line = io.read()
+    if not line then
+      break
     end
-    -- todo: system module is required
-    love.system = love.system or require('love.system')
-    -- evaluate the command
-    love.system.openURL('javascript:'..cmd)
-    
-    -- read back the output stream
-    for i = 1, 2^32 do
-      local line = io.read()
-      if not line then
-        break
-      end
-      cache[i] = line
-    end
-    local output = table.concat(cache, '\n')
-
-    -- clean up the cache
-    for i = #cache, 1, -1 do
-      cache[i] = nil
-    end
-
-    -- return the result
-    return output
+    cache[i] = line
   end
+  local output = table.concat(cache, '\n')
+
+  -- clean up the cache
+  for i = #cache, 1, -1 do
+    cache[i] = nil
+  end
+
+  -- return the result
+  return output
 end
+
+--if os then
+--  os.execute = love.js.eval
+--end
 
 local lfs = love.filesystem
 
