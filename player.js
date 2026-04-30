@@ -27,6 +27,7 @@ SOFTWARE.
 
 (function() {
   var Player = {};
+  window.Player = Player;
 
   var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
   Player.openDB = function () {

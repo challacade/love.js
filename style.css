@@ -33,11 +33,11 @@ canvas:fullscreen {
   font-size: 10px;
   left: 50%;
   top: 50%;
-  margin-left: -4rem;
-  margin-top: -4rem;
+  margin-left: -64px;
+  margin-top: -64px;
   position: absolute;
   text-indent: -9999rem;
-  border: 1.1rem solid rgba(255, 255, 255, 0.2);
+  border: 20px solid rgba(255, 255, 255, 0.2);
   display: none;
   z-index: 100;
 }
@@ -45,8 +45,8 @@ canvas:fullscreen {
 #spinner,
 #spinner:after {
   border-radius: 50%;
-  width: 8rem;
-  height: 8rem;
+  width: 128px;
+  height: 128px;
 }
 
 #spinner.pending {
@@ -66,9 +66,9 @@ canvas:fullscreen {
   50% { opacity: 1; }
   100% { opacity: 0; }
 }
-  
+
 #spinner.loading {
-  border-left: 1.1rem solid #fff;
+  border-left: 20px solid #fff;
   -webkit-transform: translateZ(0);
   -ms-transform: translateZ(0);
   transform: translateZ(0);
@@ -88,7 +88,7 @@ canvas:fullscreen {
 }
 
 #spinner.error {
-  border: 1.1rem solid #f00;
+  border: 20px solid #f00;
   color: #f00;
   content: "\00d7";
   transform: translateZ(0);

@@ -32,7 +32,7 @@ if love.event then
   local _love_event_push = love.event.push
   function love.event.push(event, action, ...)
     if event == 'quit' and action == 'reload' then
-      love.js.eval('window.location.reload()')
+      love.js.eval('window.Player.deletePkgs(); window.location.reload();')
       return
     end
     return _love_event_push(event, action, ...)
@@ -44,8 +44,8 @@ if love.audio then
   local function _cleanup_playing()
     for s in pairs(playing) do
       -- we need to use "pcall" in case the object was released
-      local ok, playing = pcall(s.isPlaying, s)
-      if not ok or not playing then
+      local ok, busy = pcall(s.isPlaying, s)
+      if not ok or not busy then
         playing[s] = nil
       end
     end
