@@ -50,7 +50,7 @@ player.js?g=mygame.love&n=1
 ```
 
 Alternatively, you can flush the package cache and reload the page from Lua using:
-```
+```Lua
 love.event.push("quit", "reload")
 ```
 
