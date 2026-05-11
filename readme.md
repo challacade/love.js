@@ -35,7 +35,7 @@ The easiest way is to embed the player as follows:
 Use the `?g=` parameter to specify which game to run.
 
 Additionally, you can pass an array of arguments to your LÖVE app using the `&arg=` parameter.
-Please note the proper usage of single and double quotes:
+Please note the proper use of single and double quotes:
 ```HTML
 <script src='player.js?g=mygame.love&arg=["--first","--second"]'></script>
 ```
@@ -46,7 +46,7 @@ love.js currently supports LÖVE 11.5:
 ```
 
 For development purposes, you can disable the package-caching feature using the `&n` parameter:
-```
+```HTML
 <script src='player.js?g=mygame.love&n=1'></script>
 ```
 
