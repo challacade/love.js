@@ -29,24 +29,25 @@ If you are running any other kind of web server (NGINX, OpenResty, Windows Serve
 The player.js script creates an HTML canvas element and renders LÖVE inside that canvas.
 You have to use "iframes" if you want to embed multiple instances of love.js on the same page.
 The easiest way is to embed the player as follows:
+```HTML
+<script src='player.js?g=mygame.love'></script>
 ```
-<script src="player.js?g=mygame.love"></script>
-```
-Use the "?g=" parameter to specify which game to run.
+Use the `?g=` parameter to specify which game to run.
 
-Additionally, you can pass an array of arguments to your LÖVE app using the "&arg=" parameter:
-```
-player.js?g=mygame.love&arg=["--first","--second"]
+Additionally, you can pass an array of arguments to your LÖVE app using the `&arg=` parameter.
+Please note the proper usage of single and double quotes:
+```HTML
+<script src='player.js?g=mygame.love&arg=["--first","--second"]'></script>
 ```
 
 love.js currently supports LÖVE 11.5:
-```
-player.js?g=mygame.love&v=11.5
+```HTML
+<script src='player.js?g=mygame.love&v=11.5'></script>
 ```
 
-For development purposes, you can disable the package-caching feature using the "&n" parameter:
+For development purposes, you can disable the package-caching feature using the `&n` parameter:
 ```
-player.js?g=mygame.love&n=1
+<script src='player.js?g=mygame.love&n=1'></script>
 ```
 
 Alternatively, you can flush the package cache and reload the page from Lua using:
