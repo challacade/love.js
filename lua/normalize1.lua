@@ -54,6 +54,13 @@ function love.js.eval(cmd)
   return output
 end
 
+-- Flush save data to IndexedDB immediately.
+-- Call this after love.filesystem.write() to ensure data is persisted
+-- without waiting for the automatic sync interval.
+function love.js.savesync()
+  love.js.eval('_idbSync()')
+end
+
 --if os then
 --  os.execute = love.js.eval
 --end

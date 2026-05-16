@@ -372,6 +372,27 @@ SOFTWARE.
   
   Player.runLove();
 
+  // Flush the Emscripten in-memory filesystem to IndexedDB so that
+  // love.filesystem saves persist reliably across browser sessions.
+  // window.Module.FS is set inside runPkgs once love.js is loaded.
+  window._idbSync = function() {
+    var fs = window.Module && window.Module.FS;
+    if (fs && typeof fs.syncfs === 'function')
+      fs.syncfs(false, function(err) {
+        if (err) console.error('[love.js] IDB sync error:', err);
+      });
+  };
+  setInterval(window._idbSync, 10000);
+  window.addEventListener('pagehide', function() {
+    // A keepalive fetch signals the browser to keep this context alive long
+    // enough for the async IndexedDB write to complete before tab teardown.
+    try { fetch('', { method: 'POST', keepalive: true }); } catch (e) {}
+    window._idbSync();
+  });
+  document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'hidden') window._idbSync();
+  });
+
   // Handling errors
   window.onerror = function (msg) {
     console.error(msg);
@@ -406,9 +427,10 @@ SOFTWARE.
     }
   };
   
-  // Tries to sync the file-system when navigating away
-  // This is not reliable, since async operations are not allowed at this point
+  // Tries to sync the file-system when navigating away.
+  // Note: async operations may be cut short here; pagehide is more reliable.
   window.onbeforeunload = function(event) {
+    window._idbSync();
     // todo: love.event.exit when navigating away
     Module.exit(0);
   };
