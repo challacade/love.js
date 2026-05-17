@@ -382,7 +382,12 @@ SOFTWARE.
         if (err) console.error('[love.js] IDB sync error:', err);
       });
   };
-  setInterval(window._idbSync, 10000);
+
+  // Crash/force-kill safety net: pagehide and visibilitychange don't always
+  // fire before the browser tears down the page, so sync on a regular cadence
+  // as well. Cancelled in onbeforeunload for clean normal exits.
+  var _idbSyncTimer = setInterval(window._idbSync, 10000);
+
   window.addEventListener('pagehide', function() {
     // A keepalive fetch signals the browser to keep this context alive long
     // enough for the async IndexedDB write to complete before tab teardown.
@@ -430,6 +435,7 @@ SOFTWARE.
   // Tries to sync the file-system when navigating away.
   // Note: async operations may be cut short here; pagehide is more reliable.
   window.onbeforeunload = function(event) {
+    clearInterval(_idbSyncTimer);
     window._idbSync();
     // todo: love.event.exit when navigating away
     Module.exit(0);
