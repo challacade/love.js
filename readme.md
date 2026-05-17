@@ -3,6 +3,8 @@ love.js allows you to run LÖVE 11.5 apps and games on the web.
 The 2dengine version of love.js can run .love files directly, without building or node.js.
 love.js is based on the previous work by Davidobot and Tanner Rogalsky using Emscripten.
 
+> **Fork note:** This is a personal fork focused on improving save data persistence. It adds automatic flushing of Emscripten's in-memory filesystem (MEMFS) to IndexedDB via `pagehide`, `visibilitychange`, and a 10-second interval, reducing the risk of data loss on unexpected tab close. A `love.js.savesync()` function is also exposed to Lua so game code can explicitly trigger a flush immediately after writing save data.
+
 The source code is available on [GitHub](https://github.com/2dengine/love.js) and the documentation is hosted on [2dengine.com](https://2dengine.com/doc/lovejs.html)
 
 Please visit https://2dengine.com and support our work, so we can continue developing this project.
